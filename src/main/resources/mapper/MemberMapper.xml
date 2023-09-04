@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+
+<mapper namespace="com.backend.hyunfit.domain.mbr.mapper.MemberMapper">
+
+    <select id="selectOneMemberById" parameterType="String" resultType="MemberDTO">
+        SELECT mbr_id,
+               mbr_pw,
+               mbr_name,
+               mbr_total_point,
+               mbr_total_exp,
+               mbr_birthdate,
+               mbr_gender,
+               mbr_height,
+               mbr_weight,
+               mbr_exercise_goal,
+               mbr_exercise_experience_level,
+               mbr_exercise_preference,
+               mbr_knee_health,
+               mbr_noise_consideration,
+               mbr_sitting_duration,
+               mbr_neck_shoulder_focused
+        FROM member
+        WHERE mbr_id = #{mbrId}
+    </select>
+
+    <select id="selectOneMemberBySeq" parameterType="_long" resultType="MemberDTO">
+        SELECT mbr_id,
+               mbr_pw,
+               mbr_name,
+               mbr_total_point,
+               mbr_total_exp,
+               mbr_birthdate,
+               mbr_gender,
+               mbr_height,
+               mbr_weight,
+               mbr_exercise_goal,
+               mbr_exercise_experience_level,
+               mbr_exercise_preference,
+               mbr_knee_health,
+               mbr_noise_consideration,
+               mbr_sitting_duration,
+               mbr_neck_shoulder_focused
+        FROM member
+        WHERE mbr_seq = #{mbrSeq}
+    </select>
+
+    <update id="updateOneMemberById" parameterType="MemberDTO">
+        UPDATE MEMBER
+        <set>
+            <if test="mbrTotalPoint != null">mbr_total_point = #{mbrTotalPoint},</if>
+            <if test="mbrTotalExp != null">mbr_total_exp = #{mbrTotalExp},</if>
+            <if test="mbrWeight != null">mbr_weight = #{mbrWeight},</if>
+            <if test="mbrExerciseGoal != null">mbr_exercise_goal = #{mbrExerciseGoal},</if>
+            <if test="mbrExerciseExperienceLevel != null">mbr_exercise_experience_level = #{mbrExerciseExperienceLevel},</if>
+            <if test="mbrExercisePreference != null">mbr_exercise_preference = #{mbrExercisePreference},</if>
+            <if test="mbrKneeHealth != null">mbr_knee_health = #{mbrKneeHealth},</if>
+            <if test="mbrNoiseConsideration != null">mbr_noise_consideration = #{mbrNoiseConsideration},</if>
+            <if test="mbrSittingDuration != null">mbr_sitting_duration = #{mbrSittingDuration},</if>
+            <if test="mbrNeckShoulderFocused != null">mbr_neck_shoulder_focused = #{mbrNeckShoulderFocused},</if>
+        </set>
+        WHERE mbr_id = #{mbrId}
+    </update>
+
+    <select id="selectAllMemberPtBySeq">
+        SELECT PT_SEQ,
+               tr.TRN_SEQ,
+               MBR_SEQ,
+               PT_RESERVATION_DATE,
+               PT_LESSON_DURATION,
+               PT_LESSON_START_DATE,
+               PT_LESSON_END_DATE,
+               PT_RESERVATION_STATUS,
+               PT_CANCELLATION_REASON,
+               PT_NOTES,
+               PT_COUNTS,
+               tr.TRN_NAME,
+               tr.TRN_TYPE,
+               PTR_RATING
+        FROM (SELECT PERSONAL_TRAINING.PT_SEQ,
+                     TRN_SEQ,
+                     MBR_SEQ,
+                     PT_CREATION_DATE,
+                     PT_RESERVATION_DATE,
+                     PT_LESSON_DURATION,
+                     PT_LESSON_START_DATE,
+                     PT_LESSON_END_DATE,
+                     PT_RESERVATION_STATUS,
+                     PT_CANCELLATION_REASON,
+                     PT_NOTES,
+                     ROW_NUMBER() OVER (PARTITION BY TRN_SEQ ORDER BY PT_RESERVATION_DATE ASC) AS PT_COUNTS,
+                      PTR_RATING
+              FROM PERSONAL_TRAINING
+                       LEFT JOIN FIREMEN.PERSONAL_TRAINING_REVIEW ON PERSONAL_TRAINING.PT_SEQ = PERSONAL_TRAINING_REVIEW.PT_SEQ
+              WHERE MBR_SEQ = #{mbrSeq}) re
+                 LEFT JOIN TRAINER tr
+                           ON re.TRN_SEQ = tr.TRN_SEQ
+        ORDER BY PT_RESERVATION_DATE ASC -- 결과를 어떤 기준으로 정렬할지 지정
+        OFFSET #{offSet} ROWS FETCH NEXT #{limit} ROWS ONLY -- 시작 위치(offset)와 반환할 로우 수(fetch next)를 지정
+    </select>
+</mapper>

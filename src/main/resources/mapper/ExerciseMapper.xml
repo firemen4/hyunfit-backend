@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+
+<mapper namespace="com.backend.hyunfit.domain.exc.mapper.ExerciseMapper">
+
+    <insert id="insertOneExercise">
+        INSERT INTO EXERCISE (
+            ADM_SEQ, EXC_NAME, EXC_TYPE, EXC_CONTENT,
+            EXC_DIFFICULTY, EXC_CALORIES_PER_REP, EXC_SET_COUNT,
+            EXC_TIME_PER_SET_IN_SEC, EXC_URL
+        ) VALUES (
+             #{admSeq}, #{excName}, #{excType}, #{excContent},
+             #{excDifficulty}, #{excCaloriesPerRep}, #{excSetCount},
+             #{excTimePerSetInSec}, #{excUrl}
+                 )
+    </insert>
+
+    <select id="selectAllExercises" resultType="ExerciseDTO">
+        SELECT * FROM EXERCISE
+    </select>
+
+    <select id="selectOneExercise" resultType="ExerciseDTO">
+        SELECT * FROM EXERCISE WHERE EXC_SEQ = #{excSeq}
+    </select>
+
+    <delete id="deleteExercise">
+        DELETE FROM EXERCISE WHERE EXC_SEQ = #{excSeq}
+    </delete>
+
+    <select id="selectAllExercisesOfRoutineByRtnSeq" parameterType="_long" resultType="ExerciseDTO">
+        Select E.EXC_SEQ, E.ADM_SEQ, E.EXC_NAME, E.EXC_TYPE, E.EXC_CONTENT, E.EXC_DIFFICULTY, E.EXC_CALORIES_PER_REP, E.EXC_SET_COUNT, E.EXC_TIME_PER_SET_IN_SEC, E.EXC_URL, E.EXC_CREATED_DATE
+        FROM ROUTINE
+                 JOIN FIREMEN.EXERCISE_ROUTINE_MAPPING ERM on ROUTINE.RTN_SEQ = ERM.RTN_SEQ
+                 JOIN FIREMEN.EXERCISE E on ERM.EXC_SEQ = E.EXC_SEQ
+        WHERE ERM.RTN_SEQ = #{rtnSeq}
+    </select>
+
+</mapper>

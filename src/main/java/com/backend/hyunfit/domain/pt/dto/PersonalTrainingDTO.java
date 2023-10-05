@@ -30,6 +30,7 @@ public class PersonalTrainingDTO {
     private String ptrContent;
     private Double ptrRating;
     private String trnName;
+    private String trnId;
     private String trnType;
     private String trnTypeName;
     private String trnProfileUrl;

@@ -43,7 +43,12 @@
     </select>
 
     <select id="selectAllPtByTrnSeq" parameterType="SearchDTO" resultType="PersonalTrainingDTO">
-        SELECT PT_SEQ,PT_RESERVATION_DATE,PT_RESERVATION_STATUS,MBR_NAME,TRN_SEQ,PERSONAL_TRAINING.MBR_SEQ
+        SELECT PT_SEQ,
+               PT_RESERVATION_DATE,
+               PT_RESERVATION_STATUS,
+               MBR_NAME,TRN_SEQ,
+               PERSONAL_TRAINING.MBR_SEQ,
+               PT_NOTE_STICKERS
         FROM FIREMEN.PERSONAL_TRAINING JOIN FIREMEN.MEMBER ON MEMBER.MBR_SEQ = PERSONAL_TRAINING.MBR_SEQ
         WHERE TRN_SEQ = #{trnSeq} AND PT_RESERVATION_DATE > #{startDate}
           AND PT_RESERVATION_DATE &lt; #{endDate}

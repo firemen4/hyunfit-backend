@@ -25,7 +25,7 @@ public class PersonalTrainingDTO {
     private Integer ptReservationStatus;
     private String ptCancellationReason;
     private String ptNoteStickers;
-    private String ptrCreationDate;
+    private Timestamp ptrCreationDate;
     private String ptrStickers;
     private String ptrContent;
     private Double ptrRating;

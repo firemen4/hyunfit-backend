@@ -9,12 +9,15 @@
             PTR.PTR_CONTENT,
             PTR.PTR_STICKERS,
             PTR.PTR_RATING,
-            PTR.PTR_CREATION_DATE
+            PTR.PTR_CREATION_DATE,
+            T.TRN_ID
         from PERSONAL_TRAINING_REVIEW PTR
                  join PERSONAL_TRAINING PT on PT.PT_SEQ = PTR.PT_SEQ
                  join TRAINER T on PT.TRN_SEQ = T.TRN_SEQ
                  join MEMBER M on PT.MBR_SEQ = M.MBR_SEQ
-        where TRN_ID = #{ptrId}
+        WHERE T.TRN_ID = #{trnId}
+        ORDER BY PTR.PTR_CREATION_DATE DESC
+        OFFSET 0 ROWS FETCH NEXT 20 ROWS ONLY
     </select>
 
 </mapper>

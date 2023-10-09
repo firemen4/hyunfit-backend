@@ -17,7 +17,6 @@
                  join MEMBER M on PT.MBR_SEQ = M.MBR_SEQ
         WHERE T.TRN_ID = #{trnId}
         ORDER BY PTR.PTR_CREATION_DATE DESC
-        OFFSET 0 ROWS FETCH NEXT 20 ROWS ONLY
     </select>
 
 </mapper>
